@@ -3,132 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>多功能工具平台</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    
-    <!-- 自定义配置 -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#2563eb',
-                        secondary: '#475569',
-                        dark: '#1e293b'
-                    },
-                    fontFamily: {
-                        courier: ['"Courier New"', 'monospace'],
-                        consolas: ['Consolas', 'monospace']
-                    },
-                }
-            }
-        }
-    </script>
-    
-    <!-- 自定义工具类 -->
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .nav-active {
-                @apply text-primary border-b-2 border-primary font-bold;
-            }
-        }
-    </style>
-    
+    <title>主页</title>
     <style>
-        html { scroll-behavior: smooth; }
-        body { padding-top: 6rem; }
-        .content-container { min-height: calc(100vh - 18rem); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #f5f5f5; }
+        /* 导航栏样式 */
+        .nav { background-color: #2c3e50; padding: 1.5rem 0; }
+        .nav-container { width: 80%; margin: 0 auto; display: flex; gap: 4rem; }
+        .nav a { color: #fff; text-decoration: none; font-family: "华文楷体", KaiTi, serif; font-size: 1.4rem; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.3s; }
+        .nav a.active { background-color: #3498db; }
+        .nav a:hover:not(.active) { background-color: #34495e; }
+        /* 内容区域 */
+        .content { width: 80%; margin: 3rem auto; font-family: Consolas, monospace; color: #333; line-height: 1.8; font-size: 1.1rem; }
+        .content h1 { font-size: 2rem; margin-bottom: 2rem; color: #2c3e50; }
+        .content p { margin-bottom: 1.5rem; }
     </style>
 </head>
-<body class="bg-gray-50 font-consolas text-dark">
-    <!-- 顶部导航栏（固定） -->
-    <header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
-        <nav class="container mx-auto px-4 py-4">
-            <ul class="flex flex-wrap space-x-4 md:space-x-8 font-courier text-lg md:text-xl">
-                <li><a href="javascript:switchModule('home')" class="nav-link nav-active py-2 inline-block">首页</a></li>
-                <li><a href="javascript:switchModule('virus')" class="nav-link py-2 inline-block">Virus</a></li>
-                <li><a href="javascript:switchModule('tools')" class="nav-link py-2 inline-block">工具</a></li>
-                <li><a href="javascript:switchModule('mirror')" class="nav-link py-2 inline-block">镜像</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- 内容容器 -->
-    <main id="content-container" class="container mx-auto px-4 py-8 content-container">
-    </main>
-
-    <!-- 页脚 -->
-    <footer class="bg-dark text-white py-6 mt-8">
-        <div class="container mx-auto px-4 text-center font-courier">
-            <p>&copy; 2024 多功能工具平台</p>
-            <p class="mt-2 text-gray-400 text-sm">可自由编辑各模块内容</p>
+<body>
+    <!-- 导航栏 -->
+    <div class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="active">主页</a>
+            <a href="virus.html">病毒</a>
+            <a href="mirror.html">定制的镜像</a>
+            <a href="tools.html">工具</a>
         </div>
-    </footer>
-
-    <script>
-        // 缓存已加载的模块内容
-        const moduleCache = {};
-        // 模块列表
-        const modules = ['home', 'virus', 'tools', 'mirror'];
-        
-        // 页面加载完成后直接加载首页（无任何动画）
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                await switchModule('home');
-            } catch (error) {
-                document.getElementById('content-container').innerHTML = `
-                    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 text-center">
-                        <i class="fa fa-exclamation-triangle text-red-500 text-3xl mb-4"></i>
-                        <h2 class="text-xl font-bold mb-2">加载失败</h2>
-                        <p class="text-gray-600">请确保所有HTML文件在同一文件夹</p>
-                    </div>
-                `;
-                console.error(error);
-            }
-        });
-        
-        // 加载模块（仅加载一次，之后缓存）
-        async function loadModule(moduleName) {
-            if (moduleCache[moduleName]) {
-                return moduleCache[moduleName];
-            }
-            const response = await fetch(`${moduleName}.html`);
-            if (!response.ok) throw new Error('文件加载失败');
-            const html = await response.text();
-            moduleCache[moduleName] = html;
-            return html;
-        }
-        
-        // 切换模块（瞬间完成，无任何动画）
-        async function switchModule(moduleName) {
-            // 更新导航激活状态
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('nav-active');
-            });
-            document.querySelectorAll('.nav-link')[modules.indexOf(moduleName)].classList.add('nav-active');
-            
-            // 加载并显示内容
-            const html = await loadModule(moduleName);
-            const contentContainer = document.getElementById('content-container');
-            contentContainer.innerHTML = html;
-            
-            // 执行模块内的脚本（确保工具功能正常）
-            executeModuleScripts(contentContainer);
-        }
-        
-        // 执行模块内的脚本
-        function executeModuleScripts(container) {
-            const scripts = container.querySelectorAll('script');
-            scripts.forEach(oldScript => {
-                const newScript = document.createElement('script');
-                Array.from(oldScript.attributes).forEach(attr => {
-                    newScript.setAttribute(attr.name, attr.value);
-                });
-                newScript.textContent = oldScript.textContent;
-                oldScript.parentNode.replaceChild(newScript, oldScript);
-            });
-        }
-    </script>
+    </div>
+    <!-- 内容区域 -->
+    <div class="content">
+        <h1>欢迎访问资源平台</h1>
+        <p>本平台提供定制镜像、实用工具及相关资源下载服务，导航栏可切换不同功能板块。</p>
+        <p>提示：病毒板块内容具有高危险性，下载使用前请充分了解风险，谨慎操作！</p>
+        <p>所有资源链接请自行填充，确保链接安全性与合规性。</p>
+    </div>
 </body>
 </html>
