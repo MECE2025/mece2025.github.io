@@ -1,0 +1,95 @@
+<div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 md:p-8">
+    <h1 class="text-2xl md:text-3xl font-bold mb-6 text-primary border-b border-gray-200 pb-3">实用工具集合</h1>
+    <div class="space-y-6 text-gray-700 leading-relaxed">
+        <!-- 以下内容可自由编辑 -->
+        <div class="tool-card p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <h2 class="text-xl font-bold text-secondary flex items-center">
+                <i class="fa fa-calculator text-primary mr-2"></i>简易计算器
+            </h2>
+            <div class="mt-3 p-3 bg-white rounded border border-gray-200">
+                <input type="text" id="calc-input" class="w-full p-2 border border-gray-300 rounded mb-2 font-consolas" placeholder="输入表达式（如 1+2*3）">
+                <button onclick="calculate()" class="bg-primary text-white py-1 px-3 rounded hover:bg-primary/90 transition-colors">计算</button>
+                <p id="calc-result" class="mt-2 font-bold"></p>
+            </div>
+        </div>
+        
+        <div class="tool-card p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <h2 class="text-xl font-bold text-secondary flex items-center">
+                <i class="fa fa-exchange text-primary mr-2"></i>文本大小写转换
+            </h2>
+            <div class="mt-3 space-y-2">
+                <textarea id="case-input" class="w-full p-2 border border-gray-300 rounded font-consolas" rows="3" placeholder="输入需要转换的文本"></textarea>
+                <div class="flex gap-2">
+                    <button onclick="convertCase('upper')" class="bg-primary text-white py-1 px-3 rounded hover:bg-primary/90 transition-colors">全部大写</button>
+                    <button onclick="convertCase('lower')" class="bg-primary text-white py-1 px-3 rounded hover:bg-primary/90 transition-colors">全部小写</button>
+                    <button onclick="convertCase('title')" class="bg-primary text-white py-1 px-3 rounded hover:bg-primary/90 transition-colors">首字母大写</button>
+                </div>
+                <textarea id="case-output" class="w-full p-2 border border-gray-300 rounded font-consolas" rows="3" readonly></textarea>
+            </div>
+        </div>
+        
+        <div class="tool-card p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <h2 class="text-xl font-bold text-secondary flex items-center">
+                <i class="fa fa-clock-o text-primary mr-2"></i>倒计时工具
+            </h2>
+            <div class="mt-3 p-3 bg-white rounded border border-gray-200">
+                <input type="number" id="countdown-minutes" class="p-2 border border-gray-300 rounded mr-2 font-consolas" placeholder="分钟" min="1" value="1">
+                <button onclick="startCountdown()" class="bg-primary text-white py-1 px-3 rounded hover:bg-primary/90 transition-colors">开始倒计时</button>
+                <p id="countdown-display" class="mt-2 font-bold text-xl"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 工具功能脚本（可保留或修改） -->
+<script>
+    // 计算器功能
+    function calculate() {
+        const input = document.getElementById('calc-input').value;
+        try {
+            const result = eval(input); // 简易实现，实际使用可替换为更安全的计算逻辑
+            document.getElementById('calc-result').textContent = `结果：${result}`;
+            document.getElementById('calc-result').className = 'mt-2 font-bold text-green-600';
+        } catch (e) {
+            document.getElementById('calc-result').textContent = '表达式错误';
+            document.getElementById('calc-result').className = 'mt-2 font-bold text-red-500';
+        }
+    }
+    
+    // 大小写转换功能
+    function convertCase(type) {
+        const input = document.getElementById('case-input').value;
+        let output = '';
+        switch(type) {
+            case 'upper': output = input.toUpperCase(); break;
+            case 'lower': output = input.toLowerCase(); break;
+            case 'title': output = input.replace(/\b\w/g, c => c.toUpperCase()); break;
+        }
+        document.getElementById('case-output').value = output;
+    }
+    
+    // 倒计时功能
+    let countdownInterval;
+    function startCountdown() {
+        const minutes = parseInt(document.getElementById('countdown-minutes').value) || 1;
+        let seconds = minutes * 60;
+        clearInterval(countdownInterval);
+        
+        function updateDisplay() {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            document.getElementById('countdown-display').textContent = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            
+            if (seconds <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown-display').textContent = '时间到！';
+                alert('倒计时结束！');
+            }
+            seconds--;
+        }
+        
+        updateDisplay();
+        countdownInterval = setInterval(updateDisplay, 1000);
+    }
+</script>
