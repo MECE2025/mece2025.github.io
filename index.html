@@ -32,13 +32,6 @@
             .nav-active {
                 @apply text-primary border-b-2 border-primary font-bold;
             }
-            .loader-spin {
-                animation: spin 1.5s linear infinite;
-            }
-            @keyframes spin {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(360deg); }
-            }
         }
     </style>
     
@@ -46,19 +39,6 @@
         html { scroll-behavior: smooth; }
         body { padding-top: 6rem; }
         .content-container { min-height: calc(100vh - 18rem); }
-        /* 仅初始加载动画背景 */
-        .initial-loader-overlay {
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(2px);
-        }
-        /* 模块切换动画（瞬间过渡） */
-        .module-content {
-            animation: fadeIn 0.2s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0.8; }
-            to { opacity: 1; }
-        }
     </style>
 </head>
 <body class="bg-gray-50 font-consolas text-dark">
@@ -74,16 +54,8 @@
         </nav>
     </header>
 
-    <!-- 初始加载动画（仅首次打开显示） -->
-    <div id="initial-loader" class="fixed inset-0 flex items-center justify-center z-50 initial-loader-overlay">
-        <div class="flex flex-col items-center">
-            <i class="fa fa-circle-o-notch text-primary text-4xl md:text-5xl loader-spin mb-4"></i>
-            <p class="font-courier text-lg md:text-xl text-secondary">初始化中...</p>
-        </div>
-    </div>
-
     <!-- 内容容器 -->
-    <main id="content-container" class="container mx-auto px-4 py-8 content-container module-content">
+    <main id="content-container" class="container mx-auto px-4 py-8 content-container">
     </main>
 
     <!-- 页脚 -->
@@ -100,17 +72,11 @@
         // 模块列表
         const modules = ['home', 'virus', 'tools', 'mirror'];
         
-        // 页面加载完成后，预加载首页（仅首次加载显示动画）
+        // 页面加载完成后直接加载首页（无任何动画）
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                // 预加载首页
-                await loadModule('home');
-                // 隐藏初始加载动画
-                setTimeout(() => {
-                    document.getElementById('initial-loader').classList.add('hidden');
-                }, 300); // 短暂动画过渡，可改为0直接隐藏
+                await switchModule('home');
             } catch (error) {
-                document.getElementById('initial-loader').classList.add('hidden');
                 document.getElementById('content-container').innerHTML = `
                     <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 text-center">
                         <i class="fa fa-exclamation-triangle text-red-500 text-3xl mb-4"></i>
@@ -124,22 +90,17 @@
         
         // 加载模块（仅加载一次，之后缓存）
         async function loadModule(moduleName) {
-            // 如果已缓存，直接返回
             if (moduleCache[moduleName]) {
                 return moduleCache[moduleName];
             }
-            
-            // 首次加载时请求文件
             const response = await fetch(`${moduleName}.html`);
             if (!response.ok) throw new Error('文件加载失败');
             const html = await response.text();
-            
-            // 缓存内容
             moduleCache[moduleName] = html;
             return html;
         }
         
-        // 切换模块（核心函数，无加载动画）
+        // 切换模块（瞬间完成，无任何动画）
         async function switchModule(moduleName) {
             // 更新导航激活状态
             document.querySelectorAll('.nav-link').forEach(link => {
@@ -147,39 +108,24 @@
             });
             document.querySelectorAll('.nav-link')[modules.indexOf(moduleName)].classList.add('nav-active');
             
-            // 获取内容（缓存优先）
-            let html = moduleCache[moduleName];
-            if (!html) {
-                // 若未缓存，加载时短暂显示加载提示（可选，可去掉）
-                document.getElementById('content-container').innerHTML = `
-                    <div class="flex justify-center items-center h-32">
-                        <p class="font-courier text-secondary">加载中...</p>
-                    </div>
-                `;
-                html = await loadModule(moduleName);
-            }
-            
-            // 显示模块内容（瞬间切换）
+            // 加载并显示内容
+            const html = await loadModule(moduleName);
             const contentContainer = document.getElementById('content-container');
             contentContainer.innerHTML = html;
-            contentContainer.classList.add('module-content');
             
-            // 执行模块内的脚本（如果有的话，如tools.html的工具函数）
+            // 执行模块内的脚本（确保工具功能正常）
             executeModuleScripts(contentContainer);
         }
         
-        // 执行模块内的脚本（关键：确保tools.html的工具功能正常）
+        // 执行模块内的脚本
         function executeModuleScripts(container) {
             const scripts = container.querySelectorAll('script');
             scripts.forEach(oldScript => {
                 const newScript = document.createElement('script');
-                // 复制属性
                 Array.from(oldScript.attributes).forEach(attr => {
                     newScript.setAttribute(attr.name, attr.value);
                 });
-                // 复制内容
                 newScript.textContent = oldScript.textContent;
-                // 替换旧脚本
                 oldScript.parentNode.replaceChild(newScript, oldScript);
             });
         }
