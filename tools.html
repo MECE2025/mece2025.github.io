@@ -1,95 +1,59 @@
-<div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 md:p-8">
-    <h1 class="text-2xl md:text-3xl font-bold mb-6 text-primary border-b border-gray-200 pb-3">实用工具集合</h1>
-    <div class="space-y-6 text-gray-700 leading-relaxed">
-        <!-- 以下内容可自由编辑 -->
-        <div class="tool-card p-4 bg-gray-50 rounded-lg border border-gray-100">
-            <h2 class="text-xl font-bold text-secondary flex items-center">
-                <i class="fa fa-calculator text-primary mr-2"></i>简易计算器
-            </h2>
-            <div class="mt-3 p-3 bg-white rounded border border-gray-200">
-                <input type="text" id="calc-input" class="w-full p-2 border border-gray-300 rounded mb-2 font-consolas" placeholder="输入表达式（如 1+2*3）">
-                <button onclick="calculate()" class="bg-primary text-white py-1 px-3 rounded hover:bg-primary/90 transition-colors">计算</button>
-                <p id="calc-result" class="mt-2 font-bold"></p>
-            </div>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工具</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #f5f5f5; }
+        /* 导航栏样式 */
+        .nav { background-color: #2c3e50; padding: 1.5rem 0; }
+        .nav-container { width: 80%; margin: 0 auto; display: flex; gap: 4rem; }
+        .nav a { color: #fff; text-decoration: none; font-family: "华文楷体", KaiTi, serif; font-size: 1.4rem; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.3s; }
+        .nav a.active { background-color: #f39c12; }
+        .nav a:hover:not(.active) { background-color: #34495e; }
+        /* 内容区域 */
+        .content { width: 80%; margin: 3rem auto; font-family: Consolas, monospace; color: #333; line-height: 2; font-size: 1.1rem; }
+        .tools-list { background-color: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .tools-list h1 { font-size: 1.8rem; margin-bottom: 2rem; color: #f39c12; }
+        .tool-item { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #eee; }
+        .tool-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .tool-item h3 { font-size: 1.3rem; margin-bottom: 0.8rem; }
+        .download-link { display: inline-block; background-color: #f39c12; color: #fff; padding: 0.6rem 1.2rem; text-decoration: none; border-radius: 4px; transition: background 0.3s; }
+        .download-link:hover { background-color: #d35400; }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="nav">
+        <div class="nav-container">
+            <a href="index.html">主页</a>
+            <a href="virus.html">病毒</a>
+            <a href="mirror.html">定制的镜像</a>
+            <a href="tools.html" class="active">工具</a>
         </div>
-        
-        <div class="tool-card p-4 bg-gray-50 rounded-lg border border-gray-100">
-            <h2 class="text-xl font-bold text-secondary flex items-center">
-                <i class="fa fa-exchange text-primary mr-2"></i>文本大小写转换
-            </h2>
-            <div class="mt-3 space-y-2">
-                <textarea id="case-input" class="w-full p-2 border border-gray-300 rounded font-consolas" rows="3" placeholder="输入需要转换的文本"></textarea>
-                <div class="flex gap-2">
-                    <button onclick="convertCase('upper')" class="bg-primary text-white py-1 px-3 rounded hover:bg-primary/90 transition-colors">全部大写</button>
-                    <button onclick="convertCase('lower')" class="bg-primary text-white py-1 px-3 rounded hover:bg-primary/90 transition-colors">全部小写</button>
-                    <button onclick="convertCase('title')" class="bg-primary text-white py-1 px-3 rounded hover:bg-primary/90 transition-colors">首字母大写</button>
-                </div>
-                <textarea id="case-output" class="w-full p-2 border border-gray-300 rounded font-consolas" rows="3" readonly></textarea>
+    </div>
+    <!-- 内容区域 -->
+    <div class="content">
+        <div class="tools-list">
+            <h1>实用工具集合</h1>
+            <div class="tool-item">
+                <h3>KMS 激活器</h3>
+                <p>功能：系统/办公软件激活工具，支持批量激活</p>
+                <a href="###" class="download-link">下载工具（请替换为实际链接）</a>
             </div>
-        </div>
-        
-        <div class="tool-card p-4 bg-gray-50 rounded-lg border border-gray-100">
-            <h2 class="text-xl font-bold text-secondary flex items-center">
-                <i class="fa fa-clock-o text-primary mr-2"></i>倒计时工具
-            </h2>
-            <div class="mt-3 p-3 bg-white rounded border border-gray-200">
-                <input type="number" id="countdown-minutes" class="p-2 border border-gray-300 rounded mr-2 font-consolas" placeholder="分钟" min="1" value="1">
-                <button onclick="startCountdown()" class="bg-primary text-white py-1 px-3 rounded hover:bg-primary/90 transition-colors">开始倒计时</button>
-                <p id="countdown-display" class="mt-2 font-bold text-xl"></p>
+            <div class="tool-item">
+                <h3>ZAPRING 加加</h3>
+                <p>功能：文件加密/解密工具，支持多种加密算法</p>
+                <a href="###" class="download-link">下载工具（请替换为实际链接）</a>
+            </div>
+            <div class="tool-item">
+                <h3>系统优化工具箱</h3>
+                <p>功能：清理垃圾、优化启动项、修复系统故障</p>
+                <a href="###" class="download-link">下载工具（请替换为实际链接）</a>
             </div>
         </div>
     </div>
-</div>
-
-<!-- 工具功能脚本（可保留或修改） -->
-<script>
-    // 计算器功能
-    function calculate() {
-        const input = document.getElementById('calc-input').value;
-        try {
-            const result = eval(input); // 简易实现，实际使用可替换为更安全的计算逻辑
-            document.getElementById('calc-result').textContent = `结果：${result}`;
-            document.getElementById('calc-result').className = 'mt-2 font-bold text-green-600';
-        } catch (e) {
-            document.getElementById('calc-result').textContent = '表达式错误';
-            document.getElementById('calc-result').className = 'mt-2 font-bold text-red-500';
-        }
-    }
-    
-    // 大小写转换功能
-    function convertCase(type) {
-        const input = document.getElementById('case-input').value;
-        let output = '';
-        switch(type) {
-            case 'upper': output = input.toUpperCase(); break;
-            case 'lower': output = input.toLowerCase(); break;
-            case 'title': output = input.replace(/\b\w/g, c => c.toUpperCase()); break;
-        }
-        document.getElementById('case-output').value = output;
-    }
-    
-    // 倒计时功能
-    let countdownInterval;
-    function startCountdown() {
-        const minutes = parseInt(document.getElementById('countdown-minutes').value) || 1;
-        let seconds = minutes * 60;
-        clearInterval(countdownInterval);
-        
-        function updateDisplay() {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            document.getElementById('countdown-display').textContent = 
-                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            
-            if (seconds <= 0) {
-                clearInterval(countdownInterval);
-                document.getElementById('countdown-display').textContent = '时间到！';
-                alert('倒计时结束！');
-            }
-            seconds--;
-        }
-        
-        updateDisplay();
-        countdownInterval = setInterval(updateDisplay, 1000);
-    }
-</script>
+</body>
+</html>
